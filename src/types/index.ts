@@ -19,7 +19,7 @@ email?: string;
 total?: string | number;
 }
 
-export interface IOrderLot extends Required<Omit<IOrderForm, 'total'>>{
+export interface IOrder extends Required<Omit<IOrderForm, 'total'>>{
   total: number;
   items: string[];
 }
