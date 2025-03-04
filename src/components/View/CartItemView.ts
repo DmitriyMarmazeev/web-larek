@@ -10,7 +10,7 @@ export interface ICartItem {
 	render(data: IProductItem, item: number): HTMLElement;
 }
 
-export class ICartItem implements ICartItem {
+export class CartItem implements ICartItem {
   basketItem: HTMLElement;
 	index:HTMLElement;
 	title: HTMLElement;
