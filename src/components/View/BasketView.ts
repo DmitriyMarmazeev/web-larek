@@ -1,3 +1,6 @@
+import { createElement } from "../../utils/utils";
+import { IEvents } from "../base/events";
+
 export interface IBasket {
   basket: HTMLElement;
   title: HTMLElement;
@@ -7,7 +10,7 @@ export interface IBasket {
   headerBasketButton: HTMLButtonElement;
   headerBasketCounter: HTMLElement;
   renderHeaderBasketCounter(value: number): void;
-  renderSumAllProducts(sumAll: number): void;
+  renderTotalSumProducts(total: number): void;
   render(): HTMLElement;
 }
 
@@ -19,13 +22,42 @@ export class Basket implements IBasket {
   basketPrice: HTMLElement;
   headerBasketButton: HTMLButtonElement;
   headerBasketCounter: HTMLElement;
-  renderHeaderBasketCounter(value: number): void {
-    throw new Error("Method not implemented.");
+  
+  constructor(template: HTMLTemplateElement, protected events: IEvents) {
+    this.basket = template.content.querySelector('.basket').cloneNode(true) as HTMLElement;
+    this.title = this.basket.querySelector('.modal__title');
+    this.basketList = this.basket.querySelector('.basket__list');
+    this.button = this.basket.querySelector('.basket__button');
+    this.basketPrice = this.basket.querySelector('.basket__price');
+    this.headerBasketButton = document.querySelector('.header__basket');
+    this.headerBasketCounter = document.querySelector('.header__basket-counter');
+    
+    this.button.addEventListener('click', () => { this.events.emit('order:open') });
+    this.headerBasketButton.addEventListener('click', () => { this.events.emit('basket:open') });
+
+    this.items = [];
   }
-  renderSumAllProducts(sumAll: number): void {
-    throw new Error("Method not implemented.");
+
+  set items(items: HTMLElement[]) {
+    if (items.length) {
+      this.basketList.replaceChildren(...items);
+      this.button.removeAttribute('disabled');
+    } else {
+      this.button.setAttribute('disabled', 'true');
+      this.basketList.replaceChildren(createElement<HTMLParagraphElement>('p', { textContent: 'Корзина пуста' }));
+    }
   }
-  render(): HTMLElement {
-    throw new Error("Method not implemented.");
+
+  renderHeaderBasketCounter(value: number) {
+    this.headerBasketCounter.textContent = String(value);
+  }
+  
+  renderTotalSumProducts(total: number) {
+    this.basketPrice.textContent = String(total + ' синапсов');
+  }
+
+  render() {
+    this.title.textContent = 'Корзина';
+    return this.basket;
   }
 }
