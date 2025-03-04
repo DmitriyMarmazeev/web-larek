@@ -1,7 +1,7 @@
 import { IActions, IProductItem } from "../../types";
 import { IEvents } from "../base/events";
 
-export interface IBasketItem {
+export interface ICartItem {
   basketItem: HTMLElement;
 	index:HTMLElement;
 	title: HTMLElement;
@@ -10,7 +10,7 @@ export interface IBasketItem {
 	render(data: IProductItem, item: number): HTMLElement;
 }
 
-export class BasketItem implements IBasketItem {
+export class ICartItem implements ICartItem {
   basketItem: HTMLElement;
 	index:HTMLElement;
 	title: HTMLElement;
