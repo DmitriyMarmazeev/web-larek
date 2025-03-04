@@ -1,12 +1,12 @@
 import { IProductItem } from "../../types";
 
-export interface IProductModel {
+export interface ICatalogModel {
   productCards: IProductItem[];
   selectedСard: IProductItem;
   setPreview(item: IProductItem): void;
 }
 
-export class ProductModel implements IProductModel {
+export class CatalogModel implements ICatalogModel {
   productCards: IProductItem[];
   selectedСard: IProductItem;
   setPreview(item: IProductItem): void {
