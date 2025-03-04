@@ -42,11 +42,8 @@ export class Card implements ICard {
     this._cardCategory.className = `card__category card__category_${this._colors[value]}`
   }
 
-  protected setPrice(value: number | null): string {
-    if (value === null) {
-      return 'Бесценно'
-    }
-    return String(value) + ' синапсов'
+  protected getPriceText(value: number | null): string {
+    return value === null ? "Бесценно" : String(value) + " синапсов"
   }
 
   render(data: IProductItem): HTMLElement {
@@ -55,7 +52,7 @@ export class Card implements ICard {
     this._cardTitle.textContent = data.title;
     this._cardImage.src = data.image;
     this._cardImage.alt = this._cardTitle.textContent;
-    this._cardPrice.textContent = this.setPrice(data.price);
+    this._cardPrice.textContent = this.getPriceText(data.price);
     return this._cardElement;
   }
 }

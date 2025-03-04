@@ -29,17 +29,14 @@ export class BasketItem implements IBasketItem {
 		}
   }
 
-	protected setPrice(value: number | null) {
-    if (value === null) {
-      return 'Бесценно'
-    }
-    return String(value) + ' синапсов'
+	protected getPriceText(value: number | null) {
+    return value === null ? "Бесценно" : String(value) + " синапсов"
   }
 
 	render(data: IProductItem, item: number) {
 		this.index.textContent = String(item);
 		this.title.textContent = data.title;
-		this.price.textContent = this.setPrice(data.price);
+		this.price.textContent = this.getPriceText(data.price);
 		return this.basketItem;
 	}
 }
