@@ -16,7 +16,11 @@ export class DetailedCard extends Card implements IDetailedCard {
     super(template, events, actions);
     this.text = this._cardElement.querySelector('.card__text');
     this.button = this._cardElement.querySelector('.card__button');
-    this.button.addEventListener('click', () => { this.events.emit('card:addToBasket') });
+    this.button.addEventListener('click', () => { this.events.emit('card:addToCart') });
+  }
+
+  protected getPriceText(value: number | null) {
+    return value === null ? "Бесценно" : String(value) + " синапсов"
   }
 
   notSale(data:IProductItem) {
@@ -37,7 +41,7 @@ export class DetailedCard extends Card implements IDetailedCard {
     this._cardTitle.textContent = data.title;
     this._cardImage.src = data.image;
     this._cardImage.alt = this._cardTitle.textContent;
-    this._cardPrice.textContent = this.setPrice(data.price);
+    this._cardPrice.textContent = this.getPriceText(data.price);
     this.text.textContent = data.description;
     this.button.textContent = this.notSale(data);
     return this._cardElement;
