@@ -1,3 +1,6 @@
+import { FormErrors } from "../../types";
+import { IEvents } from "../base/events";
+
 export interface IFormModel {
   payment: string;
   email: string;
@@ -7,7 +10,7 @@ export interface IFormModel {
   items: string[];
   setOrderAddress(field: string, value: string): void
   validateOrder(): boolean;
-  setOrderData(field: string, value: string): void
+  setOrderContacts(field: string, value: string): void
   validateContacts(): boolean;
   getOrderLot(): object;
 }
@@ -19,19 +22,75 @@ export class FormModel implements IFormModel {
   address: string;
   total: number;
   items: string[];
-  setOrderAddress(field: string, value: string): void {
-    throw new Error("Method not implemented.");
+  formErrors: FormErrors = {};
+
+  constructor(protected events: IEvents) {
+    this.payment = '';
+    this.email = '';
+    this.phone = '';
+    this.address = '';
+    this.total = 0;
+    this.items = [];
   }
-  validateOrder(): boolean {
-    throw new Error("Method not implemented.");
+
+  setOrderAddress(field: string, value: string) {
+    if (field === 'address') {
+      this.address = value;
+    }
+
+    if (this.validateOrder()) {
+      this.events.emit('order:ready', this.getOrderLot());
+    }
   }
-  setOrderData(field: string, value: string): void {
-    throw new Error("Method not implemented.");
+
+  validateOrder() {
+    const errors: FormErrors = {};
+
+    if (!this.address) {
+      errors.address = 'Введите адрес'
+    } else if (!this.payment) {
+      errors.payment = 'Выберите способ оплаты'
+    }
+
+    this.formErrors = errors;
+    this.events.emit('formErrors:address', this.formErrors);
+
+    return Object.keys(errors).length === 0;
   }
-  validateContacts(): boolean {
-    throw new Error("Method not implemented.");
+
+  setOrderContacts(field: string, value: string) {
+    if (field === 'email') {
+      this.email = value;
+    } else if (field === 'phone') {
+      this.phone = value;
+    }
+
+    if (this.validateContacts()) {
+      this.events.emit('order:ready', this.getOrderLot());
+    }
   }
-  getOrderLot(): object {
-    throw new Error("Method not implemented.");
+
+  validateContacts() {
+    const errors: typeof this.formErrors = {};
+
+    if (!this.email) {
+      errors.email = 'Необходимо указать email'
+    }
+
+    if (!this.phone) {
+      errors.phone = 'Необходимо указать телефон'
+    }
+
+    this.formErrors = errors;
+    this.events.emit('formErrors:contacts', this.formErrors);
+
+    return Object.keys(errors).length === 0;
+  }
+
+  getOrderLot() {
+    return {
+      ...this,
+      items: this.items,
+    }
   }
 }

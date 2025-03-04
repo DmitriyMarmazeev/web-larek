@@ -10,16 +10,44 @@ export interface IBasketModel {
 }
 
 export class BasketModel implements IBasketModel {
-  basketProducts: IProductItem[];
-  getCounter: () => number;
-  getSumAllProducts: () => number;
-  setSelectedСard(data: IProductItem): void {
-    throw new Error("Method not implemented.");
+  protected _basketProducts: IProductItem[];
+
+  constructor() {
+    this._basketProducts = [];
   }
-  deleteCardToBasket(item: IProductItem): void {
-    throw new Error("Method not implemented.");
+
+  set basketProducts(data: IProductItem[]) {
+    this._basketProducts = data;
   }
-  clearBasketProducts(): void {
-    throw new Error("Method not implemented.");
+
+  get basketProducts() {
+    return this._basketProducts;
+  }
+
+  getCounter() {
+    return this._basketProducts.length;
+  }
+
+  getSumAllProducts() {
+    let total = 0;
+    this._basketProducts.forEach(item => {
+      total = total + item.price;
+    });
+    return total;
+  }
+
+  setSelectedСard(data: IProductItem) {
+    this._basketProducts.push(data);
+  }
+
+  deleteCardToBasket(item: IProductItem) {
+    const index = this._basketProducts.indexOf(item);
+    if (index >= 0) {
+      this._basketProducts.splice(index, 1);
+    }
+  }
+
+  clearBasketProducts() {
+    this._basketProducts = []
   }
 }

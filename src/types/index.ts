@@ -19,15 +19,7 @@ email?: string;
 total?: string | number;
 }
 
-export interface IOrder extends IOrderForm {
-  items: string[];
-}
-
-export interface IOrderLot{
-  payment: string;
-  email: string;
-  phone: string;
-  address: string;
+export interface IOrderLot extends Required<Omit<IOrderForm, 'total'>>{
   total: number;
   items: string[];
 }
@@ -37,4 +29,4 @@ export interface IOrderResult {
   total: number;
 }
 
-export type FormErrors = Partial<Record<keyof IOrder, string>>;
+export type FormErrors = Partial<Record<keyof IOrderForm | 'items', string>>;
