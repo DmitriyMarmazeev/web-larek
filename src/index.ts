@@ -67,12 +67,7 @@ eventEmitter.on('card:addToCart', () => {
 
 eventEmitter.on('cart:open', () => {
   cart.renderTotalSumProducts(cartModel.getTotalSumProducts());
-  let i = 0;
-  cart.items = cartModel.cartProducts.map((item) => {
-    const cartItem = new CartItem(cardCartTemplate, eventEmitter, { onClick: () => eventEmitter.emit('cart:cartItemRemove', item) });
-    i = i + 1;
-    return cartItem.render(item, i);
-  })
+  cart.renderCards(cartModel.cartProducts, cardCartTemplate);
   modal.content = cart.render();
   modal.render();
 });
@@ -81,12 +76,7 @@ eventEmitter.on('cart:cartItemRemove', (item: IProductItem) => {
   cartModel.deleteCardFromCart(item);
   cart.renderCartItemsCounter(cartModel.getCounter());
   cart.renderTotalSumProducts(cartModel.getTotalSumProducts());
-  let i = 0;
-  cart.items = cartModel.cartProducts.map((item) => {
-    const basketItem = new CartItem(cardCartTemplate, eventEmitter, { onClick: () => eventEmitter.emit('cart:cartItemRemove', item) });
-    i = i + 1;
-    return basketItem.render(item, i);
-  })
+  cart.renderCards(cartModel.cartProducts, cardCartTemplate);
 });
 
 eventEmitter.on('order:open', () => {
