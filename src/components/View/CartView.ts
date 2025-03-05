@@ -1,5 +1,7 @@
+import { IProductItem } from "../../types";
 import { createElement } from "../../utils/utils";
 import { IEvents } from "../base/events";
+import { CartItem } from "./CartItemView";
 
 export interface ICart {
   cart: HTMLElement;
@@ -54,6 +56,15 @@ export class Cart implements ICart {
   
   renderTotalSumProducts(total: number) {
     this.cartPrice.textContent = String(total + ' синапсов');
+  }
+
+  renderCards(products: IProductItem[], cardCartTemplate: HTMLTemplateElement) {
+    let i = 0;
+    this.items = products.map((item) => {
+      const basketItem = new CartItem(cardCartTemplate, this.events, { onClick: () => this.events.emit('cart:cartItemRemove', item) });
+      i = i + 1;
+      return basketItem.render(item, i);
+    })
   }
 
   render() {
