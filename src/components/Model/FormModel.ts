@@ -1,4 +1,4 @@
-import { FormErrors } from "../../types";
+import { FormErrors, IOrder } from "../../types";
 import { IEvents } from "../base/events";
 
 export interface IFormModel {
@@ -12,7 +12,7 @@ export interface IFormModel {
   validateOrder(): boolean;
   setOrderContacts(field: string, value: string): void
   validateContacts(): boolean;
-  getOrder(): object;
+  getOrder(): IOrder;
 }
 
 export class FormModel implements IFormModel {
