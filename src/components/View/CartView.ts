@@ -2,62 +2,62 @@ import { createElement } from "../../utils/utils";
 import { IEvents } from "../base/events";
 
 export interface ICart {
-  basket: HTMLElement;
+  cart: HTMLElement;
   title: HTMLElement;
-  basketList: HTMLElement;
+  cartList: HTMLElement;
   button: HTMLButtonElement;
-  basketPrice: HTMLElement;
+  cartPrice: HTMLElement;
   headerBasketButton: HTMLButtonElement;
   headerBasketCounter: HTMLElement;
-  renderHeaderBasketCounter(value: number): void;
+  renderCartItemsCounter(value: number): void;
   renderTotalSumProducts(total: number): void;
   render(): HTMLElement;
 }
 
 export class Cart implements ICart {
-  basket: HTMLElement;
+  cart: HTMLElement;
   title: HTMLElement;
-  basketList: HTMLElement;
+  cartList: HTMLElement;
   button: HTMLButtonElement;
-  basketPrice: HTMLElement;
+  cartPrice: HTMLElement;
   headerBasketButton: HTMLButtonElement;
   headerBasketCounter: HTMLElement;
   
   constructor(template: HTMLTemplateElement, protected events: IEvents) {
-    this.basket = template.content.querySelector('.basket').cloneNode(true) as HTMLElement;
-    this.title = this.basket.querySelector('.modal__title');
-    this.basketList = this.basket.querySelector('.basket__list');
-    this.button = this.basket.querySelector('.basket__button');
-    this.basketPrice = this.basket.querySelector('.basket__price');
+    this.cart = template.content.querySelector('.basket').cloneNode(true) as HTMLElement;
+    this.title = this.cart.querySelector('.modal__title');
+    this.cartList = this.cart.querySelector('.basket__list');
+    this.button = this.cart.querySelector('.basket__button');
+    this.cartPrice = this.cart.querySelector('.basket__price');
     this.headerBasketButton = document.querySelector('.header__basket');
     this.headerBasketCounter = document.querySelector('.header__basket-counter');
     
     this.button.addEventListener('click', () => { this.events.emit('order:open') });
-    this.headerBasketButton.addEventListener('click', () => { this.events.emit('basket:open') });
+    this.headerBasketButton.addEventListener('click', () => { this.events.emit('cart:open') });
 
     this.items = [];
   }
 
   set items(items: HTMLElement[]) {
     if (items.length) {
-      this.basketList.replaceChildren(...items);
+      this.cartList.replaceChildren(...items);
       this.button.removeAttribute('disabled');
     } else {
       this.button.setAttribute('disabled', 'true');
-      this.basketList.replaceChildren(createElement<HTMLParagraphElement>('p', { textContent: 'Корзина пуста' }));
+      this.cartList.replaceChildren(createElement<HTMLParagraphElement>('p', { textContent: 'Корзина пуста' }));
     }
   }
 
-  renderHeaderBasketCounter(value: number) {
+  renderCartItemsCounter(value: number) {
     this.headerBasketCounter.textContent = String(value);
   }
   
   renderTotalSumProducts(total: number) {
-    this.basketPrice.textContent = String(total + ' синапсов');
+    this.cartPrice.textContent = String(total + ' синапсов');
   }
 
   render() {
     this.title.textContent = 'Корзина';
-    return this.basket;
+    return this.cart;
   }
 }

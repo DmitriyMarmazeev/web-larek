@@ -12,7 +12,7 @@ export interface IFormModel {
   validateOrder(): boolean;
   setOrderContacts(field: string, value: string): void
   validateContacts(): boolean;
-  getOrderLot(): object;
+  getOrder(): object;
 }
 
 export class FormModel implements IFormModel {
@@ -39,7 +39,7 @@ export class FormModel implements IFormModel {
     }
 
     if (this.validateOrder()) {
-      this.events.emit('order:ready', this.getOrderLot());
+      this.events.emit('order:ready', this.getOrder());
     }
   }
 
@@ -66,7 +66,7 @@ export class FormModel implements IFormModel {
     }
 
     if (this.validateContacts()) {
-      this.events.emit('order:ready', this.getOrderLot());
+      this.events.emit('order:ready', this.getOrder());
     }
   }
 
@@ -87,7 +87,7 @@ export class FormModel implements IFormModel {
     return Object.keys(errors).length === 0;
   }
 
-  getOrderLot() {
+  getOrder() {
     return {
       ...this,
       items: this.items,

@@ -17,7 +17,7 @@ export class CatalogModel implements ICatalogModel {
 
   set productCards(data: IProductItem[]) {
     this._productCards = data;
-    this.events.emit('productCards:receive');
+    this.events.emit('cards:receive');
   }
 
   get productCards() {

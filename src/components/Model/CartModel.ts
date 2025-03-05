@@ -4,8 +4,8 @@ export interface ICartModel {
   getCounter: () => number;
   getTotalSumProducts: () => number;
   setSelectedCard(data: IProductItem): void;
-  deleteCardToBasket(item: IProductItem): void;
-  clearBasketProducts(): void
+  deleteCardFromCart(item: IProductItem): void;
+  clearCartProducts(): void
 }
 
 export class CartModel implements ICartModel {
@@ -15,11 +15,11 @@ export class CartModel implements ICartModel {
     this._cartProducts = [];
   }
 
-  set basketProducts(data: IProductItem[]) {
+  set cartProducts(data: IProductItem[]) {
     this._cartProducts = data;
   }
 
-  get basketProducts() {
+  get cartProducts() {
     return this._cartProducts;
   }
 
@@ -39,14 +39,14 @@ export class CartModel implements ICartModel {
     this._cartProducts.push(data);
   }
 
-  deleteCardToBasket(item: IProductItem) {
+  deleteCardFromCart(item: IProductItem) {
     const index = this._cartProducts.indexOf(item);
     if (index >= 0) {
       this._cartProducts.splice(index, 1);
     }
   }
 
-  clearBasketProducts() {
+  clearCartProducts() {
     this._cartProducts = []
   }
 }

@@ -5,7 +5,7 @@ export interface IApiModel {
   cdn: string;
   items: IProductItem[];
   getListProductCard: () => Promise<IProductItem[]>;
-  postOrderLot: (order: IOrder) => Promise<IOrderResult>;
+  postOrder: (order: IOrder) => Promise<IOrderResult>;
 }
 
 export class ApiModel extends Api implements IApiModel {
@@ -18,17 +18,19 @@ export class ApiModel extends Api implements IApiModel {
   }
 
   getListProductCard(): Promise<IProductItem[]> {
-    return this.get('/product')
-              .then((data: ApiListResponse<IProductItem>) =>
-                data.items.map((item) => ({
-                  ...item,
-                  image: this.cdn + item.image,
-                }))
-              );
+    return this
+      .get('/product')
+      .then((data: ApiListResponse<IProductItem>) =>
+        data.items.map((item) => ({
+          ...item,
+          image: this.cdn + item.image,
+        }))
+      );
   }
 
-  postOrderLot(order: IOrder): Promise<IOrderResult> {
-    return this.post(`/order`, order)
-              .then((data: IOrderResult) => data);
+  postOrder(order: IOrder): Promise<IOrderResult> {
+    return this
+      .post(`/order`, order)
+      .then((data: IOrderResult) => data);
   }
 }
