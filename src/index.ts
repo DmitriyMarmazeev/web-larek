@@ -95,7 +95,10 @@ eventEmitter.on('order:open', () => {
   formModel.items = cartModel.cartProducts.map(item => item.id);
 });
 
-eventEmitter.on('order:paymentSelection', (button: HTMLButtonElement) => { formModel.payment = button.name })
+eventEmitter.on('order:paymentSelection', (button: HTMLButtonElement) => {
+  formModel.payment = button.name;
+  formModel.validateOrder();
+})
 
 eventEmitter.on(`order:changeAddress`, (data: { field: string, value: string }) => {
   formModel.setOrderAddress(data.field, data.value);
