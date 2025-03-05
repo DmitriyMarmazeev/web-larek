@@ -44,15 +44,23 @@ eventEmitter.on('cards:receive', () => {
 
 eventEmitter.on('card:select', (item: IProductItem) => { catalogModel.setPreview(item) });
 
-/********** Открываем модальное окно карточки товара **********/
 eventEmitter.on('modalCard:open', (item: IProductItem) => {
-  const cardPreview = new DetailedCard(detailedCardTemplate, eventEmitter)
-  modal.content = cardPreview.render(item);
+  const detailedCard = new DetailedCard(detailedCardTemplate, eventEmitter)
+
+  if(!item.price) {
+    detailedCard.setButtonState("Не продаётся");
+  } else if(cartModel.hasItem(item)) {
+    detailedCard.setButtonState("В корзине");
+  } else {
+    detailedCard.setButtonState("Купить");
+  }
+
+  modal.content = detailedCard.render(item);
   modal.render();
 });
 
 eventEmitter.on('card:addToCart', () => {
-  cartModel.setSelectedCard(catalogModel.selectedCard);
+  cartModel.addToCart(catalogModel.selectedCard);
   cart.renderCartItemsCounter(cartModel.getCounter());
   modal.close();
 });

@@ -43,7 +43,7 @@ export class Card implements ICard {
   }
 
   protected getPriceText(value: number | null): string {
-    return value === null ? "Бесценно" : String(value) + " синапсов"
+    return value === null ? "Бесценно" : `${value} синапсов`;
   }
 
   render(data: IProductItem): HTMLElement {

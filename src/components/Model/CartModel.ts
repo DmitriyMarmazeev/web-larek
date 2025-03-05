@@ -3,50 +3,52 @@ import { IProductItem } from "../../types";
 export interface ICartModel {
   getCounter: () => number;
   getTotalSumProducts: () => number;
-  setSelectedCard(data: IProductItem): void;
+  addToCart(data: IProductItem): void;
+  hasItem(item: IProductItem): boolean;
   deleteCardFromCart(item: IProductItem): void;
   clearCartProducts(): void
 }
 
 export class CartModel implements ICartModel {
-  protected _cartProducts: IProductItem[];
+  protected _cartItems: Set<IProductItem>;
 
   constructor() {
-    this._cartProducts = [];
+    this._cartItems = new Set();
   }
 
   set cartProducts(data: IProductItem[]) {
-    this._cartProducts = data;
+    this._cartItems = new Set(data);
   }
 
-  get cartProducts() {
-    return this._cartProducts;
+  get cartProducts(): IProductItem[] {
+    return Array.from(this._cartItems);
   }
 
   getCounter() {
-    return this._cartProducts.length;
+    return this._cartItems.size;
   }
 
   getTotalSumProducts() {
     let total = 0;
-    this._cartProducts.forEach(item => {
-      total = total + item.price;
+    this._cartItems.forEach((item) => {
+      total += item.price;
     });
     return total;
   }
 
-  setSelectedCard(data: IProductItem) {
-    this._cartProducts.push(data);
+  hasItem(item: IProductItem): boolean {
+    return this._cartItems.has(item);
+  }
+
+  addToCart(data: IProductItem) {
+    this._cartItems.add(data);
   }
 
   deleteCardFromCart(item: IProductItem) {
-    const index = this._cartProducts.indexOf(item);
-    if (index >= 0) {
-      this._cartProducts.splice(index, 1);
-    }
+    this._cartItems.delete(item);
   }
 
   clearCartProducts() {
-    this._cartProducts = []
+    this._cartItems.clear();
   }
 }

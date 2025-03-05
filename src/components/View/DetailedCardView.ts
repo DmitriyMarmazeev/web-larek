@@ -4,13 +4,14 @@ import { Card } from "./CardView";
 
 export interface IDetailedCard {
   text: HTMLElement;
-  button: HTMLElement;
+  button: HTMLButtonElement;
   render(data: IProductItem): HTMLElement;
+  setButtonState(message: string): void;
 }
 
 export class DetailedCard extends Card implements IDetailedCard {
   text: HTMLElement;
-  button: HTMLElement;
+  button: HTMLButtonElement;
 
   constructor(template: HTMLTemplateElement, protected events: IEvents, actions?: IActions) {
     super(template, events, actions);
@@ -20,30 +21,30 @@ export class DetailedCard extends Card implements IDetailedCard {
   }
 
   protected getPriceText(value: number | null) {
-    return value === null ? "Бесценно" : String(value) + " синапсов"
+    return value === null ? "Бесценно" : `${value} синапсов`;
   }
 
-  notSale(data:IProductItem) {
-    if(data.price) {
-      if(1 === 1 * 2) { // заглушка
-        this.button.setAttribute('disabled', 'true')
+  setButtonState(text: "Купить" | "В корзине" | "Не продаётся"): void {
+    this.button.textContent = text;
+    switch(text) {
+      case "Купить": {
+        this.button.disabled = false;
+        break;
       }
-      return 'Купить'
-    } else {
-      this.button.setAttribute('disabled', 'true')
-      return 'Не продается'
+      case "В корзине": {
+        this.button.disabled = true;
+        break;
+      }
+      case "Не продаётся": {
+        this.button.disabled = true;
+        break;
+      }
     }
   }
 
   render(data: IProductItem): HTMLElement {
-    this._cardCategory.textContent = data.category;
-    this.cardCategory = data.category;
-    this._cardTitle.textContent = data.title;
-    this._cardImage.src = data.image;
-    this._cardImage.alt = this._cardTitle.textContent;
-    this._cardPrice.textContent = this.getPriceText(data.price);
+    super.render(data);
     this.text.textContent = data.description;
-    this.button.textContent = this.notSale(data);
     return this._cardElement;
   }
 }
